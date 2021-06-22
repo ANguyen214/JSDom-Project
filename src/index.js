@@ -246,13 +246,52 @@ window.contacts = [
  Create and return the HTML to render a single contact card.
  The `contact` parameter is an object representing a single contact. 
 */
-function renderContact(contact) {}
+function renderContact(contact) {
+  const {id, name, email, picture, 
+    address: {street, suite, city, zipcode, geo: {lat, lng}},
+    phone, website, company: {name: companyName, catchPhrase, bs},} = contact;
+
+  let content = `
+    <div class="card" data-id="${id}">
+    <button class="deleteBtn" title="Delete this contact">X</button>
+    <div class="avatar">
+      <div class="circle"></div>
+      <div class="circle"></div>
+      <img src="${picture}" />
+    </div>
+    <div class="info">
+      <span class="name big">${name}</span>
+      <span class="email small">${email}</span>
+    </div>
+    <div class="details">
+      <div class="phone">${phone}</div>
+      <div class="website">${website}</div>
+    </div>
+
+    <div class="additional">
+      <div class="address">
+        <div class="suite">${suite}</div>
+        <div class="street">${street}</div>
+        <div class="city">${city}, ${zipcode}</div>
+      </div>
+      <div class="company">
+        <div class="label">Works at</div>
+        <div class="company-name">${companyName}</div>
+      </div>
+    </div>
+  </div>
+  `;
+
+  return content;
+}
 
 /*
   Render the array of contacts and insert them on the DOM.
   The contacts should be rendered in the `section` with id "contacts".
 */
-function render(contacts) {}
+function render(contacts) {
+
+}
 
 /*
   Filter by city. Filter the  array of contacts by the given city.
@@ -276,7 +315,9 @@ function filterHandler() {}
   Create a list of cities from the contacts array with no duplicates then
   add an `<option>` element for each city to the select.
 */
-function loadCities(contacts) {}
+function loadCities(contacts) {
+
+}
 
 /*
   Remove the contact from the contact list with the given id.
