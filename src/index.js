@@ -290,7 +290,9 @@ function renderContact(contact) {
   The contacts should be rendered in the `section` with id "contacts".
 */
 function render(contacts) {
-
+  const insertContact = document.querySelector("#contacts");
+  insertContact.innerHTML = contacts.map(renderContact).join(" ");
+  loadCities(contacts);
 }
 
 /*
@@ -298,7 +300,10 @@ function render(contacts) {
   Return a new array containing the filtered list. 
   Do NOT modify the original array.
 */
-function filterByCity(city) {}
+function filterByCity(city) {
+  let cityFilter = contacts.filter((contents) => contents.address.city === city);
+  return cityFilter;
+}
 
 /*
   Add an `change` event listener to the `filterOptions` select element.
