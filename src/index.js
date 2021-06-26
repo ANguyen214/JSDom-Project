@@ -291,7 +291,7 @@ function renderContact(contact) {
 */
 function render(contacts) {
   const insertContact = document.querySelector("#contacts");
-  insertContact.innerHTML = contacts.map(renderContact).join(" ");
+  insertContact.innerHTML = contacts.map(renderContact).join("");
   loadCities(contacts);
 }
 
@@ -301,8 +301,8 @@ function render(contacts) {
   Do NOT modify the original array.
 */
 function filterByCity(city) {
-  let cityFilter = contacts.filter((contents) => contents.address.city === city);
-  return cityFilter;
+  const filterCity = contacts.filter((contents) => contents.address.city == city);
+  return filterCity;
 }
 
 /*
@@ -318,7 +318,7 @@ function filterHandler() {
   filterEvent.addEventListener("change", (event) => {
     const content = event.target.value;
     if(content === "0") {
-      render();
+      render(contacts);
     } else {
       render(filterByCity(content));
     }
@@ -332,13 +332,33 @@ function filterHandler() {
   add an `<option>` element for each city to the select.
 */
 function loadCities(contacts) {
-
+  let uniqueCities = [];
+  const contactsArray = Array.from(contacts);
+  contactsArray.forEach((contact) => {
+    let city = contact.address.city;
+    let dupliCheck = uniqueCities.some((contents) => {
+     return contents.includes(city);
+    });
+    if(!dupliCheck) {
+      uniqueCities.push(`<option value="${city}">${city}</option>`);
+    }
+    return uniqueCities;
+  });
+  const select = document.querySelector("#filterOptions");
+  uniqueCities.unshift('<option value="0">-- Select a city --</option>');
+  select.innerHTML = uniqueCities.join("");
 }
 
 /*
   Remove the contact from the contact list with the given id.
 */
-function deleteContact(id) {}
+function deleteContact(id) {
+  //try using splice method after finding index 
+  const index = contacts.findIndex((contact) => contact.id === +id);
+  if(index >= 0) {
+    contacts.splice(index, 1);
+  }
+}
 
 /*
   Add a `click` event handler to the `deleteBtn` elements.
@@ -346,7 +366,14 @@ function deleteContact(id) {}
   corresponding `data-id` then call `deleteContact()` and re-render 
   the list.
 */
-function deleteButtonHandler() {}
+function deleteButtonHandler() {
+  const contactsElement = document.querySelector("#contacts");
+  contactsElement.addEventListener("click", (event) => {
+    const card = event.target.parentNode;
+    deleteContact(card.dataset.id);
+    render(contacts);
+  });
+}
 
 /*
   Perform all startup tasks here. Use this function to attach the 
@@ -354,8 +381,8 @@ function deleteButtonHandler() {}
 */
 function main() {
   filterHandler();
-  localCities();
-  render();
+  deleteButtonHandler();
+  render(contacts);
 }
 
 window.addEventListener("DOMContentLoaded", main);
